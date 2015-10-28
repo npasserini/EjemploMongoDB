@@ -1,12 +1,13 @@
 package org.uqbar.examples.mongodb;
 
-import net.vz.mongodb.jackson.DBQuery
-import net.vz.mongodb.jackson.Id
-import net.vz.mongodb.jackson.MapReduce
-import org.codehaus.jackson.annotate.JsonProperty
 import org.junit.Assert
 import org.junit.Test
-import org.uqbar.examples.mongodb.model.Producto
+import org.mongojack.Aggregation
+import org.mongojack.Aggregation.Group
+import org.mongojack.DBQuery
+import org.mongojack.DBSort
+import org.mongojack.Id
+import org.mongojack.MapReduce
 
 class FindTest extends AbstractTest {
 
@@ -32,27 +33,51 @@ class FindTest extends AbstractTest {
 	def void mapReduce() {
 		val map = '''
 			function() { 
-				emit(this.codigo, 1);
+				for (i in this.precios) {
+					emit(this.codigo, this.precios[i].precio);
+				}
 			}
 		'''
-		
+
 		val reduce = '''
 			function(key, values) {
 				var sum = 0;
-				for(var i in vals) sum += vals[i];
-				return sum;
+				var count = 0;
+				for(var i in values) {
+					sum += values[i];
+					count++;
+				}
+				return sum/count;
 			}
 		'''
-		
-		val command = MapReduce.build(map,
-				reduce,
-				MapReduce.OutputType.REPLACE, "userComments", AnalisisDePrecios, String)
-				
+
+		val command = MapReduce.build(map, reduce, 
+			MapReduce.OutputType.REPLACE, "precios", 
+			AnalisisDePrecios, String)
+
 		command.query = DBQuery.in("codigo", "1111111", "2222222", "5555555")
-				
+
 		val output = homeProducto.mongoCollection.mapReduce(command)
 
 		output.results().forEach [
+			// Assert.assertEquals(500, value, 0)
+			println('''El producto «codigo» tiene en promedio el precio $«value»''')
+		]
+	}
+
+	@Test
+	def void aggregate() {
+		val pipeline = Aggregation
+			.match(DBQuery.in("codigo", "1111111", "2222222", "5555555"))
+			.unwind("precios")
+			.projectFields("codigo", "precios.precio")
+			.group("codigo").set("value", Group.average("precios.precio"))
+			.sort(DBSort.asc("_id"))
+				
+		val output = homeProducto.mongoCollection.aggregate(pipeline, AnalisisDePrecios)
+
+		output.results().forEach[
+			// Assert.assertEquals(500, value, 0)
 			println('''El producto «codigo» tiene en promedio el precio $«value»''')
 		]
 	}

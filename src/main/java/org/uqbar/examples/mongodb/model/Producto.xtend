@@ -1,12 +1,10 @@
 package org.uqbar.examples.mongodb.model
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.ArrayList
 import java.util.List
-
-import net.vz.mongodb.jackson.ObjectId
-
-import org.codehaus.jackson.annotate.JsonProperty
 import org.eclipse.xtend.lib.annotations.Accessors
+import org.mongojack.ObjectId
 
 @Accessors
 class Producto {

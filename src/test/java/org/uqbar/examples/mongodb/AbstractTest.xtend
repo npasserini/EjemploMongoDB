@@ -36,7 +36,13 @@ class AbstractTest {
 			productos.forEach[ producto|
 				zonas.forEach[zona|
 					usuarios.forEach[usuario|
-						producto.agregarPrecio(new Precio(precio.doubleValue, zona, usuario))
+						producto.agregarPrecio(
+							new Precio(
+								precio.doubleValue + Integer.parseInt(producto.codigo), 
+								zona, 
+								usuario
+							)
+						)
 					]
 				]
 			]

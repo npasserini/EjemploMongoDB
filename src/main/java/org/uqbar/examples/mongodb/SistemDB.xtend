@@ -3,7 +3,7 @@ package org.uqbar.examples.mongodb;
 import com.mongodb.DB
 import com.mongodb.MongoClient
 import java.net.UnknownHostException
-import net.vz.mongodb.jackson.JacksonDBCollection
+import org.mongojack.JacksonDBCollection
 
 class SistemDB {
 	static SistemDB INSTANCE;

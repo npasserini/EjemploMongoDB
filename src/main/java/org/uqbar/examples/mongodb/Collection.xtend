@@ -1,8 +1,8 @@
 package org.uqbar.examples.mongodb;
 
 import java.util.List
-import net.vz.mongodb.jackson.JacksonDBCollection
-import net.vz.mongodb.jackson.MapReduce
+import org.mongojack.JacksonDBCollection
+import org.mongojack.MapReduce
 
 class Collection<T> {
 	private JacksonDBCollection<T, String> mongoCollection;
