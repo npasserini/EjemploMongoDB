@@ -1,14 +1,13 @@
 package org.uqbar.examples.mongodb
 
 import java.util.List
-import java.util.Random
+import org.eclipse.xtend.lib.annotations.Accessors
 import org.junit.After
 import org.junit.Before
 import org.uqbar.examples.mongodb.model.Precio
 import org.uqbar.examples.mongodb.model.Producto
 import org.uqbar.examples.mongodb.model.Usuario
 import org.uqbar.examples.mongodb.model.Zona
-import org.eclipse.xtend.lib.annotations.Accessors
 
 @Accessors
 class AbstractTest {

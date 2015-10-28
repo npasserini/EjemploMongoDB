@@ -15,7 +15,7 @@ class Collection<T> {
 		return mongoCollection.insert(object);
     }
 	
-	def  insert(List<T> object){
+	def insert(List<T> object){
 		return mongoCollection.insert(object);
     }
 	
